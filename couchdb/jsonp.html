@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <head>
+    <title>The JSONP test for couchdb</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <style type="text/css">
+      body {
+      font: 28px sans-serif;
+      }
+      .axis text {
+          font-family: sans-serif;
+          font-size: 22px;
+    }
+    </style>
+  </head>
+  <body>
+    <div class='content'>
+      <!-- /the chart goes here -->
+    </div>
+
+  <script>
+obj = { "test": "test3", }; 
+
+$.ajax({
+   url: "http://localhost:5984/",
+   type: 'get',
+   dataType: 'jsonp',
+   success: function(data) {
+      console.log(data.couchdb+' version '+data.version);
+      $.ajax({
+        url: 'http://localhost:5984/jstest/id1',
+        type: 'GET',
+        dataType: 'jsonp',
+        cache: false,
+        crossDomain: true,
+        }).done( function(data1) {
+          console.log(data1)
+          console.log(data1._rev)
+          var obj2 = jQuery.extend(true, {}, data1);
+          // delete obj2["_id"];
+          // delete obj2["_rev"];
+          // delete obj2["rev"];
+          // obj2._id = data1._id ;
+          // obj2._rev = data1._rev ;
+          // obj2['_rev'] = data1['_rev'] ;
+          obj2.time = new Date().getTime() / 1000;
+          console.log('obj2',obj2);
+          $.ajax({
+            url: 'http://localhost:5984/jstest/id1',
+            type: 'PUT',
+            // async: false,
+            contentType: "application/json",
+            // contentType: "application/json; charset=utf-8",
+            dataType: 'json',
+            // cache: false,
+            // crossDomain: true,
+            data: JSON.stringify(obj2)
+            }).done( function(data2) {
+                  console.log("Returned object ",data2);
+                  $.ajax({
+                    url: 'http://localhost:5984/jstest/id1',
+                    // type: 'GET',
+                    // async: false,
+                    dataType: 'jsonp',
+                    // cache: false,
+                    // crossDomain: true,
+                    }).done( function(data3) {
+                      console.log("FINAL: ",data3);
+                      console.log(data3.time)
+                            }
+                           ).fail( function(d) { console.log("FAIL") }) 
+            });
+     })}});
+
+     // Create the XHR object.
+      function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+          // XHR for Chrome/Firefox/Opera/Safari.
+          xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+          // XDomainRequest for IE.
+          xhr = new XDomainRequest();
+          xhr.open(method, url);
+        } else {
+          // CORS not supported.
+          xhr = null;
+        }
+        return xhr;
+      }
+
+      // Make the actual CORS request.
+      function makeCorsRequest(uri) {
+        console.log("got uri: " + uri);
+        var xhr = createCORSRequest('GET', uri);
+        if (!xhr) {
+          alert('CORS not supported');
+          return;
+        }
+
+        // Response handlers.
+        xhr.onload = function() {
+          console.log('Response from CORS request to ' + uri + ': ' + xhr.responseText);
+        };
+       xhr.onerror = function() {
+          console.log('Woops, there was an error making the request to ' + uri + '.');
+        };
+
+        xhr.send();
+      }
+      
+      $(document).ready(function() {
+        makeCorsRequest('http://localhost:5984/');
+        });
+
+</script>
+  </body>
+</html
