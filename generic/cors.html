@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <head>
+    <title>The CORS test</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <style type="text/css">
+      body {
+      font: 28px sans-serif;
+      }
+      .axis text {
+          font-family: sans-serif;
+          font-size: 22px;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>Testing CORS</h1>
+
+    Check browser console for errors!
+
+    Couchdb, for example, should show the version information on success.
+
+    <script>
+     // Create the XHR object.
+      function createCORSRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if ("withCredentials" in xhr) {
+          // XHR for Chrome/Firefox/Opera/Safari.
+          xhr.open(method, url, true);
+        } else if (typeof XDomainRequest != "undefined") {
+          // XDomainRequest for IE.
+          xhr = new XDomainRequest();
+          xhr.open(method, url);
+        } else {
+          // CORS not supported.
+          xhr = null;
+        }
+        return xhr;
+      }
+
+      // Make the actual CORS request.
+      function makeCorsRequest(uri) {
+        console.log("got uri: " + uri);
+        var xhr = createCORSRequest('GET', uri);
+        if (!xhr) {
+          alert('CORS not supported');
+          return;
+        }
+
+        // Response handlers.
+        xhr.onload = function() {
+          console.log('Response from CORS request to ' + uri + ': ' + xhr.responseText);
+        };
+       xhr.onerror = function() {
+          console.log('Woops, there was an error making the request to ' + uri + '.');
+        };
+
+        xhr.send();
+      }
+      
+      $(document).ready(function() {
+        makeCorsRequest('http://localhost:5984/');
+        });
+
+    </script>
+  </body>
+</html
