@@ -39,33 +39,20 @@ $.ajax({
           console.log(data1)
           console.log(data1._rev)
           var obj2 = jQuery.extend(true, {}, data1);
-          // delete obj2["_id"];
-          // delete obj2["_rev"];
-          // delete obj2["rev"];
-          // obj2._id = data1._id ;
-          // obj2._rev = data1._rev ;
-          // obj2['_rev'] = data1['_rev'] ;
+          delete obj2["_id"];
           obj2.time = new Date().getTime() / 1000;
           console.log('obj2',obj2);
           $.ajax({
             url: 'http://localhost:5984/jstest/id1',
             type: 'PUT',
-            // async: false,
             contentType: "application/json",
-            // contentType: "application/json; charset=utf-8",
             dataType: 'json',
-            // cache: false,
-            // crossDomain: true,
             data: JSON.stringify(obj2)
             }).done( function(data2) {
                   console.log("Returned object ",data2);
                   $.ajax({
                     url: 'http://localhost:5984/jstest/id1',
-                    // type: 'GET',
-                    // async: false,
                     dataType: 'jsonp',
-                    // cache: false,
-                    // crossDomain: true,
                     }).done( function(data3) {
                       console.log("FINAL: ",data3);
                       console.log(data3.time)
