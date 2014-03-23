@@ -18,7 +18,17 @@
 
   <h1>Test CouchDB record updates</h1>
 
-  On the browser console the time stamp should show on success.
+  On the browser console the time stamp should show on success. Also the _rev
+  will be updated on every refresh.
+  <p>
+  Tested on 
+  <ul>
+    <li>Firefox 23.0</li>
+    <li>Chrome 31.0.1650.63</li>
+  </ul>
+  At this point Couchdb should be installed on http://localhost:5984/ and
+  a database 'jtest' with record 'id1' should exist. Note that Couchdb needs
+  to allow both jsonp and cors (Couchdb version &gt; 1.3.x).
 
   <script>
 obj = { "test": "test3", }; 
@@ -45,7 +55,7 @@ $.ajax({
           $.ajax({
             url: 'http://localhost:5984/jstest/id1',
             type: 'PUT',
-            contentType: "application/json",
+            // contentType: "application/json",
             dataType: 'json',
             data: JSON.stringify(obj2)
             }).done( function(data2) {
@@ -55,7 +65,7 @@ $.ajax({
                     dataType: 'jsonp',
                     }).done( function(data3) {
                       console.log("FINAL: ",data3);
-                      console.log(data3.time)
+                      console.log("Time stamp",data3.time)
                             }
                            ).fail( function(d) { console.log("FAIL") }) 
             });
