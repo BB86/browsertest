@@ -2,7 +2,7 @@
 <html>
   <meta charset="UTF-8">
   <head>
-    <title>The JSONP test for couchdb</title>
+    <title>JSONP test for couchdb</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <style type="text/css">
       body {
@@ -15,9 +15,10 @@
     </style>
   </head>
   <body>
-    <div class='content'>
-      <!-- /the chart goes here -->
-    </div>
+
+  <h1>Test CouchDB record updates</h1>
+
+  On the browser console the time stamp should show on success.
 
   <script>
 obj = { "test": "test3", }; 
@@ -73,47 +74,6 @@ $.ajax({
             });
      })}});
 
-     // Create the XHR object.
-      function createCORSRequest(method, url) {
-        var xhr = new XMLHttpRequest();
-        if ("withCredentials" in xhr) {
-          // XHR for Chrome/Firefox/Opera/Safari.
-          xhr.open(method, url, true);
-        } else if (typeof XDomainRequest != "undefined") {
-          // XDomainRequest for IE.
-          xhr = new XDomainRequest();
-          xhr.open(method, url);
-        } else {
-          // CORS not supported.
-          xhr = null;
-        }
-        return xhr;
-      }
-
-      // Make the actual CORS request.
-      function makeCorsRequest(uri) {
-        console.log("got uri: " + uri);
-        var xhr = createCORSRequest('GET', uri);
-        if (!xhr) {
-          alert('CORS not supported');
-          return;
-        }
-
-        // Response handlers.
-        xhr.onload = function() {
-          console.log('Response from CORS request to ' + uri + ': ' + xhr.responseText);
-        };
-       xhr.onerror = function() {
-          console.log('Woops, there was an error making the request to ' + uri + '.');
-        };
-
-        xhr.send();
-      }
-      
-      $(document).ready(function() {
-        makeCorsRequest('http://localhost:5984/');
-        });
-
-</script>
+    </script>
   </body>
 </html
